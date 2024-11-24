@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique @map("session_token")
+    userId       Int
+    expires      DateTime
+    user         User     @relation("UserSessions", fields: [userId], references: [id])
+
+    @@map("sessions")
+}
+
+model VerificationToken {
+    identifier String
+    token      String
+    expires    DateTime
+
+    @@unique([identifier, token])
+    @@map("verificationtokens")
+}
+
+model School {
+    id       Int        @id @default(autoincrement())
+    name     String
+    address  String?
+    phone    String?
+    website  String?
+    type     SchoolType
+    users    User[]     @relation("SchoolUsers")
+    classes  Class[]    @relation("SchoolClasses")
+    students Student[]  @relation("SchoolStudents")
+    teachers Teacher[]  @relation("SchoolTeachers")
+}
+
+model User {
+    id            Int       @id @default(autoincrement())
+    name          String
+    email         String    @unique
+    password      String?
+    role          UserRole  @default(ADMIN)
+    schoolId      Int?
+    emailVerified DateTime? @map("email_verified")
+    image         String?
+    sessions      Session[] @relation("UserSessions")
+
+    school School? @relation("SchoolUsers", fields: [schoolId], references: [id])
+
+    @@unique([email, schoolId], name: "user_unique")
+    @@map("users")
+}
+
+model Student {
+    id          Int       @id @default(autoincrement())
+    name        String
+    email       String?   @unique
+    dateOfBirth DateTime?
+    gender      Gender?
+    address     String?
+    phoneNumber String?
+    schoolId    Int
+    classId     Int
+    school      School    @relation("SchoolStudents", fields: [schoolId], references: [id])
+    class       Class     @relation("ClassStudents", fields: [classId], references: [id])
+
+    @@unique([email, schoolId, classId], name: "student_unique")
+}
+
+model Teacher {
+    id          Int       @id @default(autoincrement())
+    name        String
+    email       String    @unique
+    dateOfBirth DateTime?
+    gender      Gender?
+    address     String?
+    phoneNumber String?
+    schoolId    Int
+    classId     Int
+    school      School    @relation("SchoolTeachers", fields: [schoolId], references: [id])
+    class       Class     @relation("ClassTeachers", fields: [classId], references: [id])
+
+    @@unique([email, schoolId, classId], name: "teacher_unique")
+}
+
+model Class {
+    id       Int       @id @default(autoincrement())
+    name     String
+    schoolId Int
+    school   School    @relation("SchoolClasses", fields: [schoolId], references: [id])
+    students Student[] @relation("ClassStudents")
+    teachers Teacher[] @relation("ClassTeachers")
+
+    @@unique([name, schoolId], name: "class_unique")
+}
+
+enum UserRole {
+    STUDENT
+    TEACHER
+    ADMIN
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+enum SchoolType {
+    SMK
+    SMA
+    MAN
+}
