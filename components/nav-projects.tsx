@@ -87,3 +87,23 @@ export function NavProjects({
     </SidebarGroup>
   )
 }
+
+{/* <NavProjects projects={link.projects} /> */}
+
+// projects: [
+//     {
+//         name: "Design Engineering",
+//         url: "#",
+//         icon: Frame,
+//     },
+//     {
+//         name: "Sales & Marketing",
+//         url: "#",
+//         icon: PieChart,
+//     },
+//     {
+//         name: "Travel",
+//         url: "#",
+//         icon: Map,
+//     },
+// ],

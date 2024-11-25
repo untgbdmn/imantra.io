@@ -1,9 +1,11 @@
+import LayoutAuthPage from '@/layouts/layout'
 import React from 'react'
+import FormLogin from './form-login'
 
-export default function Loginpage() {
+export default function LoginPage() {
   return (
-    <div>
-
-    </div>
+    <LayoutAuthPage title='Sign In'>
+        <FormLogin />
+    </LayoutAuthPage>
   )
 }

@@ -29,3 +29,21 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+@layer components {
+    .btn-add {
+        @apply bg-blue-500 text-white px-3 py-1 rounded-md font-semibold hover:bg-blue-500/70 transition-opacity duration-200;
+    }
+
+    .btn-cancel {
+        @apply border-black border px-3 py-1 rounded-md font-semibold;
+    }
+
+    .btn-filter {
+        @apply bg-black/10 px-3 py-1 rounded-md font-normal;
+    }
+}
+
+.hidden_scrolbar::-webkit-scrollbar {
+    display: none;
+}

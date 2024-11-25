@@ -1,52 +1,27 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
+import { auth } from '@/auth'
+import Mainlayout from '@/layouts/main-layout'
+import { CircleUser } from 'lucide-react'
+import React from 'react'
 
-export default function Page() {
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50" />
-            <div className="aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50" />
-            <div className="aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50" />
-          </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-neutral-100/50 md:min-h-min dark:bg-neutral-800/50" />
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
-  )
+export default async function Page() {
+    const session = await auth()
+
+    return (
+        <Mainlayout data={session}>
+            <div className="">
+
+                <div className="grid grid-cols-4">
+                    <div className="bg-gradient-to-br from-gray-500 to-blue-400 text-white w-full px-3 py-2 rounded-md shadow-lg">
+                        <h1 className="font-semibold inline-flex flex-row-reverse items-center justify-between w-full">
+                            <CircleUser className='w-5 h-5'/>
+                            Jumlah Siswa
+                        </h1>
+                        <h1 className="font-bold text-2xl">20 <span className="text-sm">Siswa</span></h1>
+                    </div>
+                </div>
+
+
+            </div>
+        </Mainlayout>
+    )
 }
